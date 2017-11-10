@@ -8,66 +8,74 @@
 /* Массив, очищенный от анаграмм */
 
 (function main() {
-    var array = ['возов', 'кибирг', 'корсет', 'ЗОВ', 'ГРОБОГ', 'костер', 'СЕКТОР'],
+    var array = ['воз', 'гогорог', 'корсет', 'ЗОВ', 'ГРОБОК', 'костер', 'СЕКТОР'],
         sortedArray = [];
 
-    // array.forEach(function (item) {
-    //     sortedArray.push(getUniqueCharsObject(item));
-    // });
-    // var key, value;
-    // for (key in item) {
-    //     if (item.hasOwnProperty(key)) {
-    //         value = item[key];
-    //         console.log(key + " = " + value);
-    //     }
-    // }
-    // sortedArray.sort(byOccurrences);
-    // console.log(' Входной массив:', array);
-    // console.log('Итоговый массив:', sortedArray);
-    // console.log(getSortedArray({ф: 1, в: 1, н: 3, у: 4, р: 2, г: 2, ь: 4}));
-    getObjectValuesArray({ф: 1, в: 1, н: 3, у: 4, р: 2, г: 2, ь: 4});
-    // result.forEach(function (item, index) {
-    //     var key, value;
-    //     console.log('iteration: ' + index, ' object: ', item, ' length: ' + Object.keys(item).length);
-    //     for (key in item) {
-    //         if (item.hasOwnProperty(key)) {
-    //             value = item[key];
-    //             console.log(key + " = " + value);
-    //         }
-    //     }
-    // });
-    // [{a: 1, b: 2}, {c: 3, d: 4}].sort(byOccurrences);
+    array.forEach(function (word) {
+        sortedArray.push(getObjectPairsArray(getUniqueCharsObject(word)).sort(function (first, second) {
+            /* В первую очередь сортировка по значению value */
+            if (getObjectValue(first) > getObjectValue(second)) return -1;
+            else if (getObjectValue(first) < getObjectValue(second)) return 1;
+            /* Во вторую очередь в алфавитном порядке по ключу key */
+            if (getObjectKey(first) > getObjectKey(second)) return 1;
+            else if (getObjectKey(first) < getObjectKey(second)) return -1;
+            return 0;
+        }));
+    });
 
-    function getObjectValuesArray(charsObject) {
-        var objectValuesArray = [];
-        for (var key in charsObject) {
-            if (charsObject.hasOwnProperty(key)) {
-                objectValuesArray.push(charsObject[key]);
-            }
-        }
-        console.log(charsObject);
-        console.log(Object.keys(charsObject));
-        console.log(objectValuesArray);
-        objectValuesArray.sort(function (a, b) {
-            return b - a;
-        });
-        console.log(objectValuesArray);
+    console.log(array);
+    console.log('---------------------------');
 
-        // return objectValuesArray;
+    // sortedArray.forEach(function (item, index) {
+    //     console.log(index, ':', item);
+    // });
+
+    /**
+     * Получает значение value из входного объекта пары по ключу key
+     *
+     * @param {Object} object - объект пара {key: value}
+     * @returns {Number} - количество повторений
+     */
+    function getObjectValue(object) {
+        return object[getObjectKey(object)];
     }
 
-    function byOccurrences(a, b) {
-        var aKey = Object.keys(a)[0],
-            aValue = a[aKey],
-            bKey = Object.keys(b)[0],
-            bValue = b[bKey];
-        if (aValue > bValue) return -1;
-        if (aValue < bValue) return 1;
-        return 0;
+    /**
+     * Получает ключ key из входного объекта пары
+     *
+     * @param {Object} object - объект пара {key: value}
+     * @returns {String} - ключ
+     */
+    function getObjectKey(object) {
+        for (var key in object) {
+            if (object.hasOwnProperty(key)) {
+                return key;
+            }
+        }
+    }
+
+    /**
+     * Преобразует объект уникальных букв в массив пар {key: value}, где
+     * key - буква, value - количество её повторений
+     *
+     * @param {Object} charsObject - исходный объект
+     * @returns {Array} - массив пар {key: value}
+     */
+    function getObjectPairsArray(charsObject) {
+        var objectValuesArray = [], key, pair;
+        for (key in charsObject) {
+            if (charsObject.hasOwnProperty(key)) {
+                pair = {};
+                pair[key] = charsObject[key];
+                objectValuesArray.push(pair);
+            }
+        }
+        return objectValuesArray;
     }
 
     /**
      * Разбивает слово word в массив букв
+     *
      * @param {String} word - слово для разбиения
      * @returns {Array} - массив букв
      */
@@ -78,6 +86,7 @@
     /**
      * Создаёт объект уникальных букв {key: value} из входящего слова word, где
      * key - уникальная буква, value - количество её повторений в исходном слове
+     *
      * @param {String} word - входящее слово для поиска уникальных букв
      * @returns {Object} - объект {key: value} уникальных букв на количесто её повторений
      */
@@ -90,66 +99,55 @@
         return unique;
     }
 
-    /**
-     *
-     * @param {Object} charsObject
-     * @returns {Array} - сортированный массив
-     */
-    function getSortedArray(charsObject) {
+    // f([1, 2, 3, 4, 5, 6]);
+    iterate(sortedArray);
 
-        // for (key in charsObject) {
-        //     if (charsObject.hasOwnProperty(key)) {
-        //         if (max < charsObject[key]) {
-        //             max = charsObject[key];
-        //         }
-        //     }
-        // }
-
-        var currentKey,
-            currentValue,
-            maxKey,
-            maxValue,
-            maxIndex = 0,
-            keysArray = Object.keys(charsObject),
-            outputArray = [],
-            pair = {},
-            property,
-            current,
+    function iterate(array) {
+        var current,
             left = 0,
-            right = keysArray.length - 1;
-        console.log(charsObject);
-        // console.log(keysArray);
-        while (left <= right) {
-            console.log('iteration:', left + 1);
-            for (current = left, maxKey = keysArray[current], maxValue = charsObject[maxKey], maxIndex = current;
-                 current <= right;
-                 current++) {
-                currentKey = keysArray[current];
-                currentValue = charsObject[currentKey];
-                if (charsObject.hasOwnProperty(currentKey)) {
-                    if (currentValue > maxValue) {
-                        maxKey = currentKey;
-                        maxValue = currentValue;
-                        maxIndex = current;
+            right = array.length - 1,
+            first,
+            second,
+            out = [];
+        while (left < right) {
+            for (current = left + 1, first = array[left]; current <= right; current++) {
+                second = array[current];
+                if (first && second) {
+                    if (first.length && second.length) {
+                        if (first.length === second.length) {
+                            compare(first, second);
+                            console.log('---')
+                        }
                     }
                 }
-                // console.log('key:', currentKey, 'value:', currentValue, 'left:', left, 'current:', current, 'right:', right);
             }
-            pair[maxKey] = maxValue;
-            keysArray.splice(maxIndex, 1);
-            console.log('max:', pair, 'max-index', maxIndex);
-            console.log(keysArray);
-            // outputArray.push(pair);
-            /* Clear Object */
-            for (property in pair) delete pair[property];
-            left += 1;
+            console.log('---------------------------');
+            left++;
         }
-        // outputArray.push(charsObject[keysArray[right - 1]]);
-        // sortedArray.push(charsObject[max]);
-        // return sortedUniqueCharsArray;
-        // console.log(sortedArray);
-        // return outputArray;
+
+        function compare(first, second) {
+            var i,
+                size = first.length,
+                pairFirst,
+                pairSecond;
+            console.log(first, first.length, 'and', second, second.length);
+            for (i = 0; i < size; i++) {
+                pairFirst = first[i];
+                pairSecond = second[i];
+                console.log('pair-first', pairFirst, 'pair-second', pairSecond);
+                // if (getObjectValue(pairFirst) !== getObjectValue(pairSecond)) {
+                //     console.log('break!');
+                // } else if (getObjectKey(pairFirst) !== getObjectKey(pairSecond)) {
+                //     console.log('break!');
+                // } else {
+                //     console.log('found equivalent!');
+                // }
+                if ((getObjectValue(pairFirst) === getObjectValue(pairSecond)) && (getObjectKey(pairFirst) === getObjectKey(pairSecond))) {
+                    console.log('found-equivalent!');
+                } else {
+                    console.log('break!');
+                }
+            }
+        }
     }
-
-
 })();
