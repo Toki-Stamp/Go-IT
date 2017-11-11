@@ -8,8 +8,9 @@
 /* Массив, очищенный от анаграмм */
 
 (function main() {
-    var array = ['воз', 'гогорог', 'корсет', 'ЗОВ', 'ГРОБОК', 'костер', 'СЕКТОР'],
-        sortedArray = [];
+    var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК', 'костер', 'СЕКТОР'],
+        sortedArray = [],
+        cleanArray = [];
 
     array.forEach(function (word) {
         sortedArray.push(getObjectPairsArray(getUniqueCharsObject(word)).sort(function (first, second) {
@@ -22,13 +23,10 @@
             return 0;
         }));
     });
-
-    console.log(array);
-    console.log('---------------------------');
-
-    // sortedArray.forEach(function (item, index) {
-    //     console.log(index, ':', item);
-    // });
+    cleanArray = getCleanArray(sortedArray);
+    cleanArray.forEach(function (item, index) {
+        console.log('index', index, 'item', item);
+    });
 
     /**
      * Получает значение value из входного объекта пары по ключу key
@@ -38,6 +36,7 @@
      */
     function getObjectValue(object) {
         return object[getObjectKey(object)];
+
     }
 
     /**
@@ -52,6 +51,7 @@
                 return key;
             }
         }
+
     }
 
     /**
@@ -62,7 +62,9 @@
      * @returns {Array} - массив пар {key: value}
      */
     function getObjectPairsArray(charsObject) {
-        var objectValuesArray = [], key, pair;
+        var objectValuesArray = [],
+            key,
+            pair;
         for (key in charsObject) {
             if (charsObject.hasOwnProperty(key)) {
                 pair = {};
@@ -71,6 +73,7 @@
             }
         }
         return objectValuesArray;
+
     }
 
     /**
@@ -81,6 +84,7 @@
      */
     function getCharsArray(word) {
         return word.split('');
+
     }
 
     /**
@@ -97,57 +101,62 @@
             unique[char] = (char in unique) ? ++unique[char] : 1;
         });
         return unique;
+
     }
 
-    // f([1, 2, 3, 4, 5, 6]);
-    iterate(sortedArray);
+    /**
+     * Сравнивает поэлементно каждую пару {key: value} first и second на равенство
+     *
+     * @param {Object} first - объект UniqueCharsObject уникальных букв
+     * @param {Object} second - объект UniqueCharsObject уникальных букв
+     * @returns {Boolean} - эквивалентность всех элементов
+     */
+    function compareCharsObjects(first, second) {
+        var i,
+            size = first.length,
+            pairFirst,
+            pairSecond,
+            matches;
+        for (i = 0, matches = 0; i < size; i++) {
+            pairFirst = first[i];
+            pairSecond = second[i];
+            if ((getObjectValue(pairFirst) === getObjectValue(pairSecond)) &&
+                (getObjectKey(pairFirst) === getObjectKey(pairSecond))) {
+                matches++;
+            }
+        }
+        return (matches === size);
 
-    function iterate(array) {
-        var current,
-            left = 0,
-            right = array.length - 1,
+    }
+
+    function getCleanArray(array) {
+        var cleanArray = (array) ? array.slice(0) : [], // clone
+            current,
+            start = 0,
+            stop = cleanArray.length - 1,
             first,
-            second,
-            out = [];
-        while (left < right) {
-            for (current = left + 1, first = array[left]; current <= right; current++) {
-                second = array[current];
-                if (first && second) {
-                    if (first.length && second.length) {
-                        if (first.length === second.length) {
-                            compare(first, second);
-                            console.log('---')
+            second;
+        if (stop > 1) {
+            while (start < stop) {
+                for (current = start + 1, first = cleanArray[start]; current <= stop; current++) {
+                    second = cleanArray[current];
+                    if (first && second) {
+                        if (first.length && second.length) {
+                            if (first.length === second.length) {
+                                if (compareCharsObjects(first, second)) {
+                                    cleanArray.splice(current, 1);
+                                    stop--;
+                                    current--;
+                                }
+                            }
                         }
                     }
                 }
+                start++;
             }
-            console.log('---------------------------');
-            left++;
-        }
-
-        function compare(first, second) {
-            var i,
-                size = first.length,
-                pairFirst,
-                pairSecond;
-            console.log(first, first.length, 'and', second, second.length);
-            for (i = 0; i < size; i++) {
-                pairFirst = first[i];
-                pairSecond = second[i];
-                console.log('pair-first', pairFirst, 'pair-second', pairSecond);
-                // if (getObjectValue(pairFirst) !== getObjectValue(pairSecond)) {
-                //     console.log('break!');
-                // } else if (getObjectKey(pairFirst) !== getObjectKey(pairSecond)) {
-                //     console.log('break!');
-                // } else {
-                //     console.log('found equivalent!');
-                // }
-                if ((getObjectValue(pairFirst) === getObjectValue(pairSecond)) && (getObjectKey(pairFirst) === getObjectKey(pairSecond))) {
-                    console.log('found-equivalent!');
-                } else {
-                    console.log('break!');
-                }
-            }
+            return cleanArray;
+        } else {
+            return array;
         }
     }
 })();
