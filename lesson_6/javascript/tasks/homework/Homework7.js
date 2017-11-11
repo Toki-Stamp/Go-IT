@@ -7,26 +7,70 @@
 
 /* Массив, очищенный от анаграмм */
 
-(function main() {
-    var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК', 'костер', 'СЕКТОР'],
-        sortedArray = [],
-        cleanArray = [];
+var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК', 'костер', 'СЕКТОР'];
 
-    array.forEach(function (word) {
-        sortedArray.push(getObjectPairsArray(getUniqueCharsObject(word)).sort(function (first, second) {
-            /* В первую очередь сортировка по значению value */
-            if (getObjectValue(first) > getObjectValue(second)) return -1;
-            else if (getObjectValue(first) < getObjectValue(second)) return 1;
-            /* Во вторую очередь в алфавитном порядке по ключу key */
-            if (getObjectKey(first) > getObjectKey(second)) return 1;
-            else if (getObjectKey(first) < getObjectKey(second)) return -1;
+/* Self-invoking function */
+(function main() {
+    var plainWordObjectsArray,
+        cleanWordObjectsArray,
+        cleanMappedWordObjectArray;
+
+    plainWordObjectsArray = getWordObjectsArray(array);
+    cleanWordObjectsArray = getCleanWordObjectsArray(plainWordObjectsArray);
+    cleanMappedWordObjectArray = getMappedWordObjectsArray(cleanWordObjectsArray);
+
+    console.log(array);
+    console.log(plainWordObjectsArray);
+    console.log(cleanWordObjectsArray);
+    console.log(cleanMappedWordObjectArray);
+
+    /**
+     * Создаёт объект word с несколькми полями, где
+     * {String} source-word - исходное слов
+     * {Object} chars-object - объект уникальных букв с количеством их повторений в слове
+     * {Array} simple-chars-array - массив объектов пар буква на количество повторений
+     * {Array} sorted-chars-array - отсортированный массив simple-chars-array
+     *
+     * @param {String} word - входящее слово
+     * @return {Object} - объект слова
+     */
+    function getWordObject(word) {
+        var wordObject = {};
+        if (word) {
+            wordObject['source-word'] = word;
+            wordObject['chars-object'] = getUniqueCharsObject(word);
+            wordObject['simple-chars-array'] = getObjectPairsArray(getUniqueCharsObject(word));
+            wordObject['sorted-chars-array'] = getSortedObjectPairsArray(getObjectPairsArray(getUniqueCharsObject(word)));
+        }
+        return wordObject;
+    }
+
+    /**
+     * Получает отсортированный миссив объектов {key: value}, где
+     * сортировка идёт в первую очередь по значению value, после чего,
+     * в случае равенства значений value, в алфавитном порядке по ключу key
+     *
+     * @param {Array} objectPairsArray - не сортированный массив пар {key: value}
+     * @return {Array} - возвращает отсортированный массив
+     */
+    function getSortedObjectPairsArray(objectPairsArray) {
+        var sortedObjectPairsArray = (objectPairsArray) ? objectPairsArray.slice(0) : []; // clone
+        return sortedObjectPairsArray.sort(function (first, second) {
+            if (getObjectValue(first) > getObjectValue(second)) {
+                return -1;
+            }
+            else if (getObjectValue(first) < getObjectValue(second)) {
+                return 1;
+            }
+            if (getObjectKey(first) > getObjectKey(second)) {
+                return 1;
+            }
+            else if (getObjectKey(first) < getObjectKey(second)) {
+                return -1;
+            }
             return 0;
-        }));
-    });
-    cleanArray = getCleanArray(sortedArray);
-    cleanArray.forEach(function (item, index) {
-        console.log('index', index, 'item', item);
-    });
+        });
+    }
 
     /**
      * Получает значение value из входного объекта пары по ключу key
@@ -62,17 +106,17 @@
      * @returns {Array} - массив пар {key: value}
      */
     function getObjectPairsArray(charsObject) {
-        var objectValuesArray = [],
+        var objectPairsArray = [],
             key,
             pair;
         for (key in charsObject) {
             if (charsObject.hasOwnProperty(key)) {
                 pair = {};
                 pair[key] = charsObject[key];
-                objectValuesArray.push(pair);
+                objectPairsArray.push(pair);
             }
         }
-        return objectValuesArray;
+        return objectPairsArray;
 
     }
 
@@ -84,7 +128,6 @@
      */
     function getCharsArray(word) {
         return word.split('');
-
     }
 
     /**
@@ -95,12 +138,14 @@
      * @returns {Object} - объект {key: value} уникальных букв на количесто её повторений
      */
     function getUniqueCharsObject(word) {
-        var unique = {};
-        getCharsArray(word).forEach(function (char) {
-            char = char.toLowerCase();
-            unique[char] = (char in unique) ? ++unique[char] : 1;
-        });
-        return unique;
+        var uniqueCharsObject = {};
+        if (word && (typeof word === 'string')) {
+            getCharsArray(word).forEach(function (char) {
+                char = char.toLowerCase();
+                uniqueCharsObject[char] = (char in uniqueCharsObject) ? ++uniqueCharsObject[char] : 1;
+            });
+        }
+        return uniqueCharsObject;
 
     }
 
@@ -129,34 +174,67 @@
 
     }
 
-    function getCleanArray(array) {
-        var cleanArray = (array) ? array.slice(0) : [], // clone
+    /**
+     * Создаёт массив объектов слов из исходного массива
+     *
+     * @param {Array} array - входной массив слов {String}
+     * @return {Array} - возвращает массив объектов слов
+     */
+    function getWordObjectsArray(array) {
+        var wordObjectsArray = [];
+        array.forEach(function (item) {
+            wordObjectsArray.push(getWordObject(item));
+        });
+        return wordObjectsArray;
+    }
+
+    /**
+     * Очишает массив объктов слов от анаграмм
+     *
+     * @param {Array} wordObjectsArray - входной массив
+     * @return {Array} - очищенный от анаграмм массив
+     */
+    function getCleanWordObjectsArray(wordObjectsArray) {
+        var cleanWordObjectsArray = (wordObjectsArray) ? wordObjectsArray.slice(0) : [], // clone
             current,
-            start = 0,
-            stop = cleanArray.length - 1,
+            pointer = 0,
+            size = cleanWordObjectsArray.length - 1,
             first,
             second;
-        if (stop > 1) {
-            while (start < stop) {
-                for (current = start + 1, first = cleanArray[start]; current <= stop; current++) {
-                    second = cleanArray[current];
+        if (size > 1) {
+            while (pointer < size) {
+                for (current = pointer + 1, first = cleanWordObjectsArray[pointer]['sorted-chars-array']; current <= size; current++) {
+                    second = cleanWordObjectsArray[current]['sorted-chars-array'];
                     if (first && second) {
                         if (first.length && second.length) {
                             if (first.length === second.length) {
                                 if (compareCharsObjects(first, second)) {
-                                    cleanArray.splice(current, 1);
-                                    stop--;
+                                    cleanWordObjectsArray.splice(current, 1);
+                                    size--;
                                     current--;
                                 }
                             }
                         }
                     }
                 }
-                start++;
+                pointer++;
             }
-            return cleanArray;
+            return cleanWordObjectsArray;
         } else {
-            return array;
+            return wordObjectsArray;
         }
     }
-})();
+
+    /**
+     * Создаёт массив мапинг, возвращая из входного массива объектов слов массив исходных слов {String}
+     *
+     * @param {Array} wordObjectsArray - входной массив объектов слов
+     * @return {Array} - массив исходных слов
+     */
+    function getMappedWordObjectsArray(wordObjectsArray) {
+        return wordObjectsArray.map(function (item) {
+            return item['source-word'];
+        })
+    }
+
+})(array);
