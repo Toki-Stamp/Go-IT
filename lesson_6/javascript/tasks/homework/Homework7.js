@@ -54,7 +54,7 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
      * @return {Array} - возвращает отсортированный массив
      */
     function getSortedObjectPairsArray(objectPairsArray) {
-        var sortedObjectPairsArray = (objectPairsArray) ? objectPairsArray.slice(0) : []; // clone
+        var sortedObjectPairsArray = (objectPairsArray) ? objectPairsArray.slice() : []; // clone
         return sortedObjectPairsArray.sort(function (first, second) {
             if (getObjectValue(first) > getObjectValue(second)) {
                 return -1;
@@ -195,7 +195,7 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
      * @return {Array} - очищенный от анаграмм массив
      */
     function getCleanWordObjectsArray(wordObjectsArray) {
-        var cleanWordObjectsArray = (wordObjectsArray) ? wordObjectsArray.slice(0) : [], // clone
+        var cleanWordObjectsArray = (wordObjectsArray) ? wordObjectsArray.slice() : [], // clone
             current,
             pointer = 0,
             size = cleanWordObjectsArray.length - 1,
@@ -237,4 +237,4 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
         })
     }
 
-})(array);
+})();
