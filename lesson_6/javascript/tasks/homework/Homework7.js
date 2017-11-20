@@ -7,7 +7,7 @@
 
 /* Массив, очищенный от анаграмм */
 
-var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК', 'костер', 'СЕКТОР'];
+var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'гробик', 'костер', 'сектор'];
 
 /* Self-invoking function */
 (function main() {
@@ -15,13 +15,13 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
         cleanWordObjectsArray,
         cleanMappedWordObjectArray;
 
-    plainWordObjectsArray = getWordObjectsArray(array);
-    cleanWordObjectsArray = getCleanWordObjectsArray(plainWordObjectsArray);
+    plainWordObjectsArray      = getWordObjectsArray(array);
+    cleanWordObjectsArray      = getCleanWordObjectsArray(plainWordObjectsArray);
     cleanMappedWordObjectArray = getMappedWordObjectsArray(cleanWordObjectsArray);
 
     console.log(array);
-    console.log(plainWordObjectsArray);
-    console.log(cleanWordObjectsArray);
+    // console.log(plainWordObjectsArray);
+    // console.log(cleanWordObjectsArray);
     console.log(cleanMappedWordObjectArray);
 
     /**
@@ -37,8 +37,8 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
     function getWordObject(word) {
         var wordObject = {};
         if (word) {
-            wordObject['source-word'] = word;
-            wordObject['chars-object'] = getUniqueCharsObject(word);
+            wordObject['source-word']        = word;
+            wordObject['chars-object']       = getUniqueCharsObject(word);
             wordObject['simple-chars-array'] = getObjectPairsArray(getUniqueCharsObject(word));
             wordObject['sorted-chars-array'] = getSortedObjectPairsArray(getObjectPairsArray(getUniqueCharsObject(word)));
         }
@@ -111,7 +111,7 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
             pair;
         for (key in charsObject) {
             if (charsObject.hasOwnProperty(key)) {
-                pair = {};
+                pair      = {};
                 pair[key] = charsObject[key];
                 objectPairsArray.push(pair);
             }
@@ -141,12 +141,11 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
         var uniqueCharsObject = {};
         if (word && (typeof word === 'string')) {
             getCharsArray(word).forEach(function (char) {
-                char = char.toLowerCase();
+                char                    = char.toLowerCase();
                 uniqueCharsObject[char] = (char in uniqueCharsObject) ? ++uniqueCharsObject[char] : 1;
             });
         }
         return uniqueCharsObject;
-
     }
 
     /**
@@ -163,7 +162,7 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
             pairSecond,
             matches;
         for (i = 0, matches = 0; i < size; i++) {
-            pairFirst = first[i];
+            pairFirst  = first[i];
             pairSecond = second[i];
             if ((getObjectValue(pairFirst) === getObjectValue(pairSecond)) &&
                 (getObjectKey(pairFirst) === getObjectKey(pairSecond))) {
@@ -197,8 +196,8 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
     function getCleanWordObjectsArray(wordObjectsArray) {
         var cleanWordObjectsArray = (wordObjectsArray) ? wordObjectsArray.slice() : [], // clone
             current,
-            pointer = 0,
-            size = cleanWordObjectsArray.length - 1,
+            pointer               = 0,
+            size                  = cleanWordObjectsArray.length - 1,
             first,
             second;
         if (size > 1) {
@@ -237,4 +236,22 @@ var array = ['воз', 'киборг', 'корсет', 'ЗОВ', 'ГРОБИК',
         })
     }
 
+})();
+
+(function main_super() {
+    var i,
+        length,
+        key,
+        object = {},
+        clean  = [];
+
+    for (i = 0, length = array.length; i < length; i++) {
+        key         = array[i].toLowerCase().split('').sort().join('');
+        object[key] = array[i];
+    }
+    for (key in object) {
+        clean.push(object[key]);
+    }
+    console.log(array);
+    console.log(clean);
 })();

@@ -10,5 +10,17 @@
 
 /* Self-invoking function */
 (function main() {
-    /* Всё получится! */
-})(/* global параметр */);
+    var test0 = [1, 2, 3];
+    var test1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    var test2 = [71, -548, 12.3, 83, -47, -1.7, -892, 58, 31415, 2718, -38];
+
+    console.log('sum', test0, '=', sum(test0));
+    console.log('sum', test1, '=', sum(test1));
+    console.log('sum', test2, '=', sum(test2));
+
+    function sum(array) {
+        return array.reduce(function (previous, current) {
+            return previous + current;
+        });
+    }
+})();
