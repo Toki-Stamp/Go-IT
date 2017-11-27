@@ -1,0 +1,9 @@
+Практическое занятие.
+
+Разбираем обязательно эти 3 задачи
+
+http://learn.javascript.ru/settimeout-setinterval#функция-задержка
+http://learn.javascript.ru/settimeout-setinterval#вызов-не-чаще-чем-в-n-миллисекунд
+http://learn.javascript.ru/settimeout-setinterval#тормозилка
+
++ разбираем задачки из домашек которые не ясны.

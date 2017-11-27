@@ -1,0 +1,11 @@
+Практическое занятие
+
+Делаем слайдер
+Заготовка:
+https://github.com/puzankov/javascript_hw/tree/master/slider1
+
+Спагетти код который получился после занятия:
+https://github.com/puzankov/javascript_hw/tree/slider1/slider1
+
+
+https://events.yandex.ru/lib/talks/711/ - шаблонизаторы

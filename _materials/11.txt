@@ -1,0 +1,8 @@
+Тема 11
+
+
+ - Полиморфные функции 
+ - JSON
+ - setTimeout, setInterval 
+ - eval 
+ - try … catch

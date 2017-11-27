@@ -1,0 +1,13 @@
+Урок 7. Замыкания и область видимости
+
+ - Глобальный объект
+ - Замыкания, функции изнутри
+ - [[Scope]] для new Function
+ - Локальные переменные для объекта
+ - Модули через замыкания
+
+
+Домашнее задание. JS. Урок 7.
+Codewars
+
+http://www.codewars.com/kata/closures-and-scopes http://www.codewars.com/kata/can-you-keep-a-secret http://www.codewars.com/kata/lazily-executing-a-function
