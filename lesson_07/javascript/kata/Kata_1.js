@@ -16,6 +16,7 @@ function createFunctions(n) {
         var callback = function me() {
             return me.i;
         };
+
         callback.i = i;
         callbacks.push(callback);
     }
