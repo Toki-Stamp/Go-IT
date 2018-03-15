@@ -42,105 +42,108 @@
 */
 
 function Calculator() {
-    var
-        query = {},
-        init  = function (input) {
+    var expression        = {},
+        init              = function (input) {
             var array;
 
             if (input) {
-                if (query.operands) {
-                    delete query.operands;
+                if (expression.operands) {
+                    delete expression.operands;
                 }
 
-                if (query.operation) {
-                    delete query.operation;
+                if (expression.operation) {
+                    delete expression.operation;
                 }
 
                 array = input.split(' ');
 
-                query.operands = [];
-                query.operands.push(parseInt(array[0], 10));
-                query.operands.push(parseInt(array[2], 10));
+                expression.operands = [];
+                expression.operands.push(parseInt(array[0], 10));
+                expression.operands.push(parseInt(array[2], 10));
 
-                query.operation = array[1];
+                expression.operation = array[1];
+            }
+        },
+        addOperation      = function (operationKey, operationFunction) {
+            if (operationKey && operationFunction && typeof operationFunction === 'function') {
+                if (this instanceof Calculator) {
+                    Calculator.addOperation(operationKey, operationFunction);
+                } else {
+                    if (!Calculator.operations[operationKey]) {
+                        Calculator.operations[operationKey] = operationFunction;
+                        console.log('Operation "' + operationKey + '" successfully added!');
+                    } else {
+                        console.log('Error: Operation "' + operationKey + '" already defined! Therefore can not be added twice!');
+                    }
+                }
+            }
+        },
+        getOperationsList = function () {
+            var operation;
+
+            if (this instanceof Calculator) {
+                Calculator.getOperationsList();
+            } else {
+                for (operation in Calculator.operations) {
+                    if (Calculator.operations.hasOwnProperty(operation)) {
+                        console.log(operation, Calculator.operations[operation]);
+                    }
+                }
             }
         };
 
-    this.calculate = function (input) {
+    this.calculate         = function (input) {
         init(input);
 
-        if (query.operation in Calculator.methods) {
+        if (expression.operation in Calculator.operations) {
             console.log(
                 input,
                 '=',
-                Calculator.methods[query.operation].apply(query, query.operands)
+                Calculator.operations[expression.operation].apply(expression, expression.operands)
             );
         } else {
             console.log(
                 'Error: Can not calculate expression "' + input + '".',
-                'Operation "' + query.operation + '" not found!'
+                'Operation "' + expression.operation + '" not defined!'
             );
         }
 
     };
+    this.addOperation      = addOperation;
+    this.getOperationsList = getOperationsList;
 
     /* --- Static --- */
-    Calculator.methods = Calculator.methods || {};
-    if (!Calculator.addMethod) {
-        Calculator.addMethod = function (name, func) {
-            if (name && func && typeof func === 'function') {
-                if (!this.methods[name]) {
-                    this.methods[name] = func;
-                    console.log('Operation "' + name + '" successfully added!');
-                } else {
-                    console.log('Error: Operation "' + name + '" already defined! Therefore can not be added twice!');
-                }
-            }
-        };
-        Calculator.addMethod('+', function (a, b) {
-            return a + b;
-        });
-        Calculator.addMethod('-', function (a, b) {
-            return a - b;
-        });
-    }
-    if (!Calculator.showMethods) {
-        Calculator.showMethods = function () {
-            var name;
-
-            for (name in this.methods) {
-                if (this.methods.hasOwnProperty(name)) {
-                    console.log(name, this.methods[name]);
-                }
-            }
-        };
+    if (!Calculator.operations) {
+        Calculator.operations = {};
+        if (!Calculator.addOperation) {
+            Calculator.addOperation = addOperation;
+            Calculator.addOperation('+', function (a, b) {
+                return a + b;
+            });
+            Calculator.addOperation('-', function (a, b) {
+                return a - b;
+            });
+        }
+        if (!Calculator.getOperationsList) {
+            Calculator.getOperationsList = getOperationsList;
+        }
     }
 }
 
 var calc = new Calculator();
 
-Calculator.addMethod('+', function (a, b) {
-    return a + b;
+calc.addOperation('*', function (a, b) {
+    return a * b;
 });
+calc.addOperation('/', function (a, b) {
+    return a / b;
+});
+Calculator.addOperation('^', function (a, b) {
+    return Math.pow(a, b);
+});
+
 calc.calculate('4 + 2');
 calc.calculate('7 - 3');
 calc.calculate('7 * 3');
-Calculator.addMethod('*', function (a, b) {
-    return a * b;
-});
-calc.calculate('7 * 3');
 calc.calculate('18 / 3');
-Calculator.addMethod('/', function (a, b) {
-    return a / b;
-});
-calc.calculate('18 / 3');
-calc.calculate('3 ** 2');
-Calculator.addMethod('**', function (a, b) {
-    return Math.pow(a, b);
-});
-calc.calculate('3 ** 2');
-
-var calc2 = new Calculator();
-
-calc2.calculate('7 -- 2');
-calc2.calculate('7 - 2');
+calc.calculate('5 ^ 3');
