@@ -18,21 +18,11 @@ var double = function (a) {
 };
 
 var make_lazy = function () {
-    var func   = arguments[0],
-        params = (function () {
-            var result = [],
-                i,
-                size   = arguments[0].length;
-
-            for (i = 1; i < size; i += 1) {
-                result.push(arguments[0][i]);
-            }
-
-            return result;
-        })(arguments);
+    var fn   = arguments[0],
+        args = [].slice.call(arguments, 1);
 
     return function () {
-        return func.apply(func, params);
+        return fn.apply(null, args);
     }
 };
 

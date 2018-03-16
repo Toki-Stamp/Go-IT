@@ -64,16 +64,16 @@ function Calculator() {
                 expression.operation = array[1];
             }
         },
-        addOperation      = function (operationKey, operationFunction) {
-            if (operationKey && operationFunction && typeof operationFunction === 'function') {
+        addOperation      = function (key, fn) {
+            if (key && fn && typeof fn === 'function') {
                 if (this instanceof Calculator) {
-                    Calculator.addOperation(operationKey, operationFunction);
+                    Calculator.addOperation(key, fn);
                 } else {
-                    if (!Calculator.operations[operationKey]) {
-                        Calculator.operations[operationKey] = operationFunction;
-                        console.log('Operation "' + operationKey + '" successfully added!');
+                    if (!Calculator.operations[key]) {
+                        Calculator.operations[key] = fn;
+                        console.log('Operation "' + key + '" successfully added!');
                     } else {
-                        console.log('Error: Operation "' + operationKey + '" already defined! Therefore can not be added twice!');
+                        console.log('Error: Operation "' + key + '" already defined! Therefore can not be added twice!');
                     }
                 }
             }
@@ -138,6 +138,7 @@ calc.addOperation('*', function (a, b) {
 calc.addOperation('/', function (a, b) {
     return a / b;
 });
+
 Calculator.addOperation('^', function (a, b) {
     return Math.pow(a, b);
 });
