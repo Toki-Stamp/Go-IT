@@ -32,7 +32,7 @@ var make_lazy = function () {
         })(arguments);
 
     return function () {
-        return func.apply(this, params);
+        return func.apply(func, params);
     }
 };
 
