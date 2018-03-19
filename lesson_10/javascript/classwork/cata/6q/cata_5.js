@@ -77,3 +77,31 @@
  Number constructors, etc.
 
 */
+
+var typer = (function (toBeDefined) {
+
+    return {
+        isNumber:    function (input) {
+            return isFinite(input) && (!isNaN(input)) && (typeof input === 'number');
+        },
+        isString:    function (input) {
+            return (typeof input === 'string')
+        },
+        isArray:     toBeDefined,
+        isFunction:  toBeDefined,
+        isDate:      toBeDefined,
+        isRegExp:    toBeDefined,
+        isBoolean:   toBeDefined,
+        isError:     toBeDefined,
+        isNull:      toBeDefined,
+        isUndefined: toBeDefined
+    };
+}(null));
+
+console.log(typer.isNumber(5));
+console.log(typer.isNumber());
+console.log(typer.isNumber('5'));
+console.log(typer.isNumber(NaN));
+console.log(typer.isNumber(Infinity));
+console.log(typer.isNumber(-Infinity));
+console.log(typer.isNumber(undefined));

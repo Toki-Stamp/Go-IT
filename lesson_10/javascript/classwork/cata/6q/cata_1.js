@@ -24,47 +24,47 @@
 
 */
 
-// function fibonacci(n) {
-//     var result      = [],
-//         fib         = function (n) {
-//             if (n <= 1) return n;
-//
-//             return fibonacci.memo[n] = fibonacci.memo[n] || (
-//                 (fibonacci.memo[n - 1] || fib(n - 1)) +
-//                 (fibonacci.memo[n - 2] || fib(n - 2))
-//             );
-//         },
-//         getSequence = function (n) {
-//             var sequence = [];
-//
-//             for (var key = 0; key <= n; key += 1) {
-//                 sequence.push(fibonacci.memo[key]);
-//             }
-//
-//             return sequence;
-//         };
-//
-//     /* memoization */
-//     fibonacci.memo = fibonacci.memo || {0: 0, 1: 1};
-//
-//     if (!arguments.length) {
-//         throw new Error('Invalid input range!');
-//     }
-//
-//     if (n > 0) {
-//         fib(n);
-//         result = getSequence(n - 1);
-//     }
-//
-//     return result;
-// }
-
 function fibonacci(n) {
+    var result      = [],
+        fib         = function (n) {
+            if (n <= 1) return n;
+
+            return fibonacci.memo[n] = fibonacci.memo[n] || (
+                (fibonacci.memo[n - 1] || fib(n - 1)) +
+                (fibonacci.memo[n - 2] || fib(n - 2))
+            );
+        },
+        getSequence = function (n) {
+            var sequence = [];
+
+            for (var key = 0; key <= n; key += 1) {
+                sequence.push(fibonacci.memo[key]);
+            }
+
+            return sequence;
+        };
+
+    /* memoization */
+    fibonacci.memo = fibonacci.memo || {0: 0, 1: 1};
+
+    if (!arguments.length) {
+        throw new Error('Invalid input range!');
+    }
+
+    if (n > 0) {
+        fib(n);
+        result = getSequence(n - 1);
+    }
+
+    return result;
+}
+
+function fibonacci_best(n) {
     if (n <= 0) return [];
     if (n == 1) return [0];
     if (n == 2) return [0, 1];
 
-    var res = fibonacci(n - 1);
+    var res = fibonacci_best(n - 1);
 
     res.push(res[res.length - 1] + res[res.length - 2]);
 
@@ -77,3 +77,10 @@ console.log(fibonacci(1));
 console.log(fibonacci(2));
 console.log(fibonacci(3));
 console.log(fibonacci(4));
+
+console.log(fibonacci_best(-1));
+console.log(fibonacci_best(0));
+console.log(fibonacci_best(1));
+console.log(fibonacci_best(2));
+console.log(fibonacci_best(3));
+console.log(fibonacci_best(4));
