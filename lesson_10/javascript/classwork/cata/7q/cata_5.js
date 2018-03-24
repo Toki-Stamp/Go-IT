@@ -8,6 +8,7 @@
 /* http://www.codewars.com/kata/find-duplicates */
 
 /* Find Duplicates */
+
 /*
  Given an array, find the duplicates in that array,
  and return a new array of those duplicates.
@@ -24,3 +25,22 @@
  [0, 1, 2, 3, 4, 5]                ==>  []
 
 */
+
+function duplicates(arr) {
+    var duplicates = [];
+
+    arr.forEach(function (value, index, array) {
+        var hasNext = (array.indexOf(value, index + 1) !== -1),
+            unique  = (hasNext ? (duplicates.indexOf(value) === -1) : false);
+
+        if (hasNext && unique) {
+            duplicates.push(value);
+        }
+    });
+
+    return duplicates;
+}
+
+var arr = [1, 2, 4, 4, 3, 3, 1, 5, 3, '5'];
+
+console.log(arr, '===>', duplicates(arr));

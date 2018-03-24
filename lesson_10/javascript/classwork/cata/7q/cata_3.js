@@ -8,6 +8,7 @@
 /* http://www.codewars.com/kata/descending-order */
 
 /* Descending Order */
+
 /*
  Your task is to make a function that
  can take any non-negative integer as a argument
@@ -23,3 +24,14 @@
  Input: 1254859723 Output: 9875543221
 
 */
+
+function descendingOrder(n) {
+    return parseInt(n.toString()
+        .split('')
+        .sort()
+        .reverse()
+        .join(''), 10);
+}
+
+console.log(descendingOrder(12497369));
+console.log(descendingOrder(1838));

@@ -8,6 +8,7 @@
 /* http://www.codewars.com/kata/reverseit-1 */
 
 /* reverseIt */
+
 /*
  You have to create a function named reverseIt.
 
