@@ -8,6 +8,7 @@
 /* http://www.codewars.com/kata/reverseit-1 */
 
 /* reverseIt */
+
 /*
  You have to create a function named reverseIt.
 
@@ -25,3 +26,16 @@
  [1,2,3] -> [1,2,3]
 
 */
+
+function reverseIt(data) {
+    return (
+        (typeof data === 'string') ?
+            (data.toString().split('').reverse().join('')) :
+            (typeof data === 'number') ?
+                (+data.toString().split('').reverse().join('')) : data
+    )
+}
+
+console.log('Hello', '==>', reverseIt('Hello'));
+console.log(314159, '==>', reverseIt(314159));
+console.log([1, 2, 3], '==>', reverseIt([1, 2, 3]));

@@ -8,6 +8,7 @@
 /* http://www.codewars.com/kata/more-than-one-way-to-call-a-function-or-skin-a-cat */
 
 /* More than one way to call a function, or skin a cat */
+
 /*
  Write a single function that can be invoked by either
 
@@ -19,3 +20,11 @@
  the sum of the 2 numbers.
 
 */
+
+function sum(a, b) {
+    return arguments.length > 1 ? a + b : function (b) {return a + b}
+}
+
+console.log(sum(2)(3));
+console.log(sum(2, 3));
+console.log(sum(2, 0));

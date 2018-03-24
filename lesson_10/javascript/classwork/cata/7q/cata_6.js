@@ -8,6 +8,7 @@
 /* http://www.codewars.com/kata/gradually-adding-parameters */
 
 /* Gradually Adding Parameters */
+
 /*
  This kata is all about adding numbers.
 
@@ -31,3 +32,22 @@
  add(1, 4, -5, 5); //=> 14
 
 */
+
+function add() {
+    return [].slice.call(arguments).reduce(function (result, value, index) {
+        return result + value * (index + 1);
+    }, 0);
+}
+
+function add_best() {
+    return [].reduce.call(arguments, function (result, value, index) {
+        return result + value * (index + 1);
+    }, 0);
+}
+
+console.log(add_best());
+console.log(add());
+console.log(add_best(1, 2, 3));
+console.log(add(1, 2, 3));
+console.log(add_best(1, 4, -5, 5));
+console.log(add(1, 4, -5, 5));

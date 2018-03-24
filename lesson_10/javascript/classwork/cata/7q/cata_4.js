@@ -8,6 +8,7 @@
 /* http://www.codewars.com/kata/complete-the-pattern-number-10-parallelogram */
 
 /* Complete The Pattern #10 - Parallelogram */
+
 /*
  You have to write a function pattern
  which returns the following Pattern
@@ -85,3 +86,40 @@
  12345678901234567890
 
 */
+
+function pattern(n) {
+    var output = '',
+        row,
+        digit,
+        counter;
+
+    for (row = 1; row <= n; row += 1) {
+        for (counter = n - row; counter > 0; counter -= 1) {
+            output += ' ';
+        }
+
+        for (
+            digit = 1, counter = 0;
+            counter < n;
+            digit < 9 ? digit += 1 : digit = 0, counter += 1
+        ) {
+            output += digit;
+        }
+
+        for (counter = 1; counter < row; counter += 1) {
+            output += ' ';
+        }
+
+        row < n ? output += '\n' : null;
+    }
+
+    return output;
+}
+
+console.log(pattern(2));
+console.log();
+console.log(pattern(3));
+console.log();
+console.log(pattern(7));
+console.log();
+console.log(pattern(10));
