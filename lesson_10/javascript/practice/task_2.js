@@ -16,3 +16,13 @@
  getMaxNumber([1,15,-20,2,-7]); // 15
 
 */
+
+function getMaxNumber(array) {
+    return array.reduce(function (prev, cur) {
+        return (cur > prev) ? cur : prev;
+    })
+}
+
+console.log(getMaxNumber([1, 30, 40, 2, 7])); // 40
+console.log(getMaxNumber([1, 15, -20, 2, -7])); // 15
+console.log(getMaxNumber([1, -15, -20, -2, -7])); // 1

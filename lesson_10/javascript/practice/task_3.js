@@ -19,3 +19,9 @@
  are not included in the passed string.
 
 */
+
+function alphabeticalOrder(string) {
+    return string.split('').sort().join('');
+}
+
+console.log(alphabeticalOrder('webmaster')); //abeemrstw

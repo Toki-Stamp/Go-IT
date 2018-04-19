@@ -8,6 +8,7 @@
 /* http://www.codewars.com/kata/basic-js-calculating-averages */
 
 /* Basic JS - Calculating averages */
+
 /*
  Let's build a calculator that can calculate
  the average for an arbitrary number of arguments.
@@ -23,3 +24,19 @@
  It expects Calculator.average(3, 4, 5) to return 4.
 
 */
+
+var Calculator = {
+    average: function () {
+        return [].reduce.call(arguments, function (accumulator, currentItem, index, array) {
+            return (
+                ((index + 1) < array.length) ?
+                    (accumulator + currentItem) :
+                    ((accumulator + currentItem) / array.length)
+            );
+        }, 0);
+    }
+};
+
+console.log(Calculator.average(3, 4, 5));
+console.log(Calculator.average(2, 4, 9));
+console.log(Calculator.average());

@@ -16,3 +16,11 @@
  Expected Output: Development
 
 */
+
+function longestWord(string) {
+    return string.split(' ').reduce(function (prev, cur) {
+        return prev.length > cur.length ? prev : cur;
+    })
+}
+
+console.log(longestWord('Web Development Tutorial'));
