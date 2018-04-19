@@ -79,9 +79,8 @@
 */
 
 var typer = (function (toBeDefined) {
-
     return {
-        isNumber:    function (input) {
+        isNumber   : function (input) {
             return (
                 isFinite(input) &&
                 !isNaN(input) &&
@@ -89,40 +88,40 @@ var typer = (function (toBeDefined) {
                 (Object.prototype.toString.call(input) === '[object Number]')
             );
         },
-        isString:    function (input) {
+        isString   : function (input) {
             return (typeof input === 'string');
         },
-        isArray:     function (input) {
+        isArray    : function (input) {
             return (
                 (Object.prototype.toString.call(input) === '[object Array]') &&
                 (input instanceof Array)
             );
         },
-        isFunction:  function (input) {
+        isFunction : function (input) {
             return (
                 (Object.prototype.toString.call(input) === '[object Function]') &&
                 (typeof input === 'function')
             );
         },
-        isDate:      function (input) {
+        isDate     : function (input) {
             return (
                 (Object.prototype.toString.call(input) === '[object Date]') &&
                 (input instanceof Date)
             );
         },
-        isRegExp:    function (input) {
+        isRegExp   : function (input) {
             return (
                 (Object.prototype.toString.call(input) === '[object RegExp]') &&
                 (input instanceof RegExp)
             );
         },
-        isBoolean:   function (input) {
+        isBoolean  : function (input) {
             return (typeof input === 'boolean');
         },
-        isError:     function (input) {
+        isError    : function (input) {
             return (Object.prototype.toString.call(input) === '[object Error]');
         },
-        isNull:      function (input) {
+        isNull     : function (input) {
             return (Object.prototype.toString.call(input) === '[object Null]');
         },
         isUndefined: function (input) {
@@ -134,26 +133,78 @@ var typer = (function (toBeDefined) {
     };
 }(null));
 
-var fn            = function () {
-    },
+var typer_best = (function (toBeDefined) {
+    return {
+        isNumber   : function (input) {
+            return (
+                ((typeof input === 'number') ||
+                    (input instanceof Number)) && !isNaN(input)
+            );
+        },
+        isString   : function (input) {
+            return (
+                (typeof input === 'string') ||
+                (input instanceof String)
+            );
+        },
+        isArray    : function (input) {
+            // return (input instanceof Array);
+            return (Array.isArray(input));
+        },
+        isFunction : function (input) {
+            return (typeof input === 'function');
+        },
+        isDate     : function (input) {
+            return (input instanceof Date);
+        },
+        isRegExp   : function (input) {
+            return (input instanceof RegExp);
+        },
+        isBoolean  : function (input) {
+            return (
+                (typeof input === 'boolean') ||
+                (input instanceof Boolean)
+            );
+        },
+        isError    : function (input) {
+            return (input instanceof Error);
+        },
+        isNull     : function (input) {
+            return (input === null);
+        },
+        isUndefined: function (input) {
+            return (input === undefined);
+        }
+    };
+}(null));
+
+var fn            = function () {},
     arr           = [],
     obj           = {},
     reg           = new RegExp('\d'),
-    numberTest    = [[2][0], 5, 2.4, '5', true, new Number(4).valueOf(), parseInt('99', 10), NaN, -Infinity, Infinity, undefined, null],
+    numberTest    = [
+        [2][0], 5, 2.4, '5', true, new Number(4).valueOf(), parseInt('99', 10), NaN, -Infinity, Infinity, undefined,
+        null
+    ],
     stringTest    = ['str', '', fn, true, arr, obj, NaN, undefined, null],
     arrayTest     = [[], [[]], arr, obj, {}, NaN, undefined, null],
-    functionTest  = [function () {
-    }, fn, new Function(), {}, [], arr, obj, undefined, null],
+    functionTest  = [
+        function () {}, fn, new Function(), {}, [], arr, obj, undefined, null
+    ],
     dateTest      = [new Date(), Date, NaN, undefined, null],
     regExpTest    = [reg, new RegExp('\s', 'ig'), /\sg/, 'str', undefined, null, fn, arr, obj],
     booleanTest   = [true, false, !1, !0, !+'1', !+'0', undefined, !undefined, NaN, !NaN, Infinity, !Infinity],
-    errorTest     = [new Error, new EvalError, new RangeError, new ReferenceError, new SyntaxError, new TypeError, new URIError, null, undefined, fn, arr, obj, 1, '4', true],
+    errorTest     = [
+        new Error, new EvalError, new RangeError, new ReferenceError, new SyntaxError, new TypeError, new URIError,
+        null, undefined, fn, arr, obj, 1, '4', true
+    ],
     nullTest      = [null, !null, undefined, NaN, obj, fn, arr, 4, '5'],
     undefinedTest = [undefined, , null, '', 4, NaN];
 
 function test(array, lib, name) {
-    var i, size;
-
+    var i,
+        size;
+    
     console.log('Testing "' + name + '" method');
     console.log('Input data: ', array);
     for (i = 0, size = array.length; i < size; i++) {
